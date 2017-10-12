@@ -35,6 +35,11 @@ if not "%1"=="" (
 
 if defined VIRTUAL_ENV (
     call "%VIRTUAL_ENV%\Scripts\deactivate.bat"
+    if defined VIRTUALENVWRAPPER_HOOK_DIR (
+        if exist "%VIRTUALENVWRAPPER_HOOK_DIR%\postdeactivate.bat" (
+            call "%VIRTUALENVWRAPPER_HOOK_DIR%\postdeactivate.bat"
+        )
+    )
 )
 
 pushd "%WORKON_HOME%" 2>NUL && popd
@@ -61,6 +66,11 @@ if not exist "%WORKON_HOME%\%VENV%\Scripts\activate.bat" (
 call "%WORKON_HOME%\%VENV%\Scripts\activate.bat"
 if defined WORKON_OLDTITLE (
     title %1 ^(VirtualEnv^)
+)
+if defined VIRTUALENVWRAPPER_HOOK_DIR (
+    if exist "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat" (
+        call "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat"
+    )
 )
 
 if exist "%WORKON_HOME%\%VENV%\%VIRTUALENVWRAPPER_PROJECT_FILENAME%" (
