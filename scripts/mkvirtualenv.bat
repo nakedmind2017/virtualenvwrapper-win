@@ -75,7 +75,7 @@ set /a debug=0
         shift
     )
 
-    set "cur=%1"
+    set "cur=%~1"
     :: is cur in virualenv_param_options?
     call set filteredvar=%%virualenv_param_options:*%cur%=%%
 
@@ -192,7 +192,7 @@ call "%WORKON_HOME%\%venvwrapper.envname%\Scripts\activate.bat"
 if not "%venvwrapper.project_path%"=="" call setprojectdir.bat "%venvwrapper.project_path%"
 
 :: handle -i (can be multiple)
-if not "%venvwrapper.install_packages%"=="" call :pipinstall "%venvwrapper.install_packages%"
+call :pipinstall %venvwrapper.install_packages%
 
 :: handle -r
 if not "%venvwrapper.requirements_file%"=="" (
@@ -210,15 +210,12 @@ if defined VIRTUALENVWRAPPER_HOOK_DIR (
 goto:cleanup
 
 :pipinstall
-    setlocal
-        set packages=%~1
-        for /F "tokens=1*" %%g in ("%packages%") do (
+    if "%~1"=="" goto:eof
+
             :: XXX should use --disable-pip-version-check (but only if pip version >= 6)
-            if not "%%g"=="" call "%VIRTUAL_ENV%\Scripts\pip" install %%g
-            if not "%%h"=="" call :pipinstall "%%h"
-        )
-    endlocal
-    goto:eof
+    call "%VIRTUAL_ENV%\Scripts\pip" install %1
+    shift
+    goto:pipinstall
 
 :error_message
     echo.
