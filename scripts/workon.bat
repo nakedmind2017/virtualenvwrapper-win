@@ -67,11 +67,6 @@ call "%WORKON_HOME%\%VENV%\Scripts\activate.bat"
 if defined WORKON_OLDTITLE (
     title %1 ^(VirtualEnv^)
 )
-if defined VIRTUALENVWRAPPER_HOOK_DIR (
-    if exist "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat" (
-        call "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat"
-    )
-)
 
 if exist "%WORKON_HOME%\%VENV%\%VIRTUALENVWRAPPER_PROJECT_FILENAME%" (
     call cdproject.bat
@@ -80,5 +75,12 @@ if exist "%WORKON_HOME%\%VENV%\%VIRTUALENVWRAPPER_PROJECT_FILENAME%" (
         cd /d "%WORKON_HOME%\%VENV%"
     )
 )
+
+if defined VIRTUALENVWRAPPER_HOOK_DIR (
+    if exist "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat" (
+        call "%VIRTUALENVWRAPPER_HOOK_DIR%\postactivate.bat"
+    )
+)
+
 
 :END
